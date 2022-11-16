@@ -111,9 +111,9 @@ var questionNum = 0
     
     //checks if right/wrong, tells user if correct, tracks # answered correctly
     var clickHandler = function() {
-    // btnForEventL.forEach(button => {
-    //      button.removeEventListener("click",clickHandler)
-    //      })
+    btnForEventL.forEach(button => {
+         button.removeEventListener("click",clickHandler)
+         })
     if (questions[questionNum].answer[this.id-1].correct === true) {
         correctCount++
         feedbackEl.textContent = "CORRECT! So far your Score is " + correctCount/(questionNum+1)*100 +"%"
@@ -121,18 +121,18 @@ var questionNum = 0
         feedbackEl.textContent = "Incorrect. Your Score is " + correctCount/(questionNum+1)*100 +"%"
         timeLeft = timeLeft - 5
     }
-
-   //delay prompt to next question
+    //delay prompt to next question
     setTimeout(() => { questionNum++
+        btnForEventL.forEach(button => {
+            button.addEventListener("click",clickHandler)
+            })
         feedbackEl.textContent = ""
         questionEl.textContent = JSON.stringify(questions[questionNum].question);
         answerEl1.textContent = questions[questionNum].answer[0].text
         answerEl2.textContent = questions[questionNum].answer[1].text
         answerEl3.textContent = questions[questionNum].answer[2].text
         answerEl4.textContent = questions[questionNum].answer[3].text
-     }, 2000);
-    clickHandler()
-
+     }, 4000);
     }
 
 //TODO:  GAME OVER when timer up or Q's answ
