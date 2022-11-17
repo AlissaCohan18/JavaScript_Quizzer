@@ -54,7 +54,7 @@ var questions = [question1, question2, question3, question4, question5];
 var startEl = document.getElementById("start-btn");
 var questEl = document.getElementById("question-content");
 var timerEl = document.getElementById("countdown");
-var timeLeft = 10;
+var timeLeft = 5;
 var textHide = document.getElementById("hide");
 var questionEl = document.getElementById("q-here");
 var answerEl1 = document.getElementById("1");
@@ -64,11 +64,14 @@ var answerEl4 = document.getElementById("4");
 var correctCount = 0;
 var feedbackEl = document.getElementById("feedback");
 var btnForEventL = document.querySelectorAll("button.btn");
-var finalScore
+var finalScore;
+var formInput = document.getElementById("form")
+
 
 //hide first q&a and timer until "start quiz"
 questEl.style.visibility = "hidden";
 textHide.style.visibility = "hidden";
+formInput.style.visibility = "hidden";
 //show q&a and start time once quiz started
 var startQuizHandler = function () {
   startEl.style.visibility = "hidden";
@@ -103,22 +106,18 @@ var clickHandler = function () {
   });
   if (questions[questionNum].answer[this.id - 1].correct === true) {
     correctCount++;
-   finalScore = Math.round((correctCount / (questionNum + 1)) * 100)
+    finalScore = Math.round((correctCount / (questionNum + 1)) * 100);
     feedbackEl.textContent =
-      "CORRECT! So far your Score is " +
-      finalScore + "%";
+      "CORRECT! So far your Score is " + finalScore + "%";
   } else {
-    finalScore = Math.round((correctCount / (questionNum + 1)) * 100)
-    feedbackEl.textContent =
-      "Incorrect. Your Score is " +
-      finalScore +
-      "%";
+    finalScore = Math.round((correctCount / (questionNum + 1)) * 100);
+    feedbackEl.textContent = "Incorrect. Your Score is " + finalScore + "%";
     timeLeft = timeLeft - 5;
   }
   //delay prompt to next question
   setTimeout(() => {
     questionNum++;
-    if (timeLeft > 0) {
+    if (timeLeft > 0 && questions.length > questionNum) {
       btnForEventL.forEach((button) => {
         button.addEventListener("click", clickHandler);
       });
@@ -130,19 +129,23 @@ var clickHandler = function () {
       answerEl4.textContent = questions[questionNum].answer[3].text;
     } else {
       feedbackEl.textContent =
-        "Game Over! Your Final Score is " +
-        finalScore +
-        "%";
+        "Game Over! Your Final Score is " + finalScore + "%";
+      textHide.style.visibility = "hidden";
+      //save high score locally and display on screen
+      if (localStorage.getItem("High Score") < finalScore) {
+        localStorage.setItem("High Score", finalScore);
+        formInput.style.visibility = "visible";
+        //TODO: show high score instead of "loser"
+      } else {console.log("loser")}
     }
   }, 2000);
 };
 
-//TODO:  GAME OVER when timer up or Q's answ
-//TODO:  checks for time=0 || all questions answered
-
 //TODO:  prompt for initials
 
-//TODO:  save high score locally and display on screen
+//display High Score
+//need a textContent to display it somewhere
+
 
 startEl.addEventListener("click", startQuizHandler);
 btnForEventL.forEach((button) => {
