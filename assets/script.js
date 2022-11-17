@@ -54,7 +54,7 @@ var questions = [question1, question2, question3, question4, question5];
 var startEl = document.getElementById("start-btn");
 var questEl = document.getElementById("question-content");
 var timerEl = document.getElementById("countdown");
-var timeLeft = 25;
+var timeLeft = 10;
 var textHide = document.getElementById("hide");
 var questionEl = document.getElementById("q-here");
 var answerEl1 = document.getElementById("1");
@@ -64,6 +64,7 @@ var answerEl4 = document.getElementById("4");
 var correctCount = 0;
 var feedbackEl = document.getElementById("feedback");
 var btnForEventL = document.querySelectorAll("button.btn");
+var finalScore
 
 //hide first q&a and timer until "start quiz"
 questEl.style.visibility = "hidden";
@@ -73,7 +74,7 @@ var startQuizHandler = function () {
   startEl.style.visibility = "hidden";
   questEl.style.visibility = "visible";
   textHide.style.visibility = "visible";
-//prints countdown to screen
+  //prints countdown to screen
   var clockCountdown = document.createElement("h3");
   var timeInterval = setInterval(function () {
     if (timeLeft > 0) {
@@ -102,34 +103,42 @@ var clickHandler = function () {
   });
   if (questions[questionNum].answer[this.id - 1].correct === true) {
     correctCount++;
+   finalScore = Math.round((correctCount / (questionNum + 1)) * 100)
     feedbackEl.textContent =
       "CORRECT! So far your Score is " +
-      Math.round((correctCount / (questionNum + 1)) * 100) +
-      "%";
+      finalScore + "%";
   } else {
+    finalScore = Math.round((correctCount / (questionNum + 1)) * 100)
     feedbackEl.textContent =
       "Incorrect. Your Score is " +
-      Math.round((correctCount / (questionNum + 1)) * 100) +
+      finalScore +
       "%";
     timeLeft = timeLeft - 5;
   }
   //delay prompt to next question
   setTimeout(() => {
     questionNum++;
-    btnForEventL.forEach((button) => {
-      button.addEventListener("click", clickHandler);
-    });
-    feedbackEl.textContent = "";
-    questionEl.textContent = JSON.stringify(questions[questionNum].question);
-    answerEl1.textContent = questions[questionNum].answer[0].text;
-    answerEl2.textContent = questions[questionNum].answer[1].text;
-    answerEl3.textContent = questions[questionNum].answer[2].text;
-    answerEl4.textContent = questions[questionNum].answer[3].text;
+    if (timeLeft > 0) {
+      btnForEventL.forEach((button) => {
+        button.addEventListener("click", clickHandler);
+      });
+      feedbackEl.textContent = "";
+      questionEl.textContent = JSON.stringify(questions[questionNum].question);
+      answerEl1.textContent = questions[questionNum].answer[0].text;
+      answerEl2.textContent = questions[questionNum].answer[1].text;
+      answerEl3.textContent = questions[questionNum].answer[2].text;
+      answerEl4.textContent = questions[questionNum].answer[3].text;
+    } else {
+      feedbackEl.textContent =
+        "Game Over! Your Final Score is " +
+        finalScore +
+        "%";
+    }
   }, 2000);
 };
 
 //TODO:  GAME OVER when timer up or Q's answ
-        //TODO:  checks for time=0 || all questions answered
+//TODO:  checks for time=0 || all questions answered
 
 //TODO:  prompt for initials
 
