@@ -54,7 +54,7 @@ var questions = [question1, question2, question3, question4, question5];
 var startEl = document.getElementById("start-btn");
 var questEl = document.getElementById("question-content");
 var timerEl = document.getElementById("countdown");
-var timeLeft = 5;
+var timeLeft = 15;
 var textHide = document.getElementById("hide");
 var questionEl = document.getElementById("q-here");
 var answerEl1 = document.getElementById("1");
@@ -65,8 +65,10 @@ var correctCount = 0;
 var feedbackEl = document.getElementById("feedback");
 var btnForEventL = document.querySelectorAll("button.btn");
 var finalScore;
-var formInput = document.getElementById("form")
-
+var formInput = document.getElementById("form");
+var highScores = [];
+var leaderBoard;
+var highScoresObj;
 
 //hide first q&a and timer until "start quiz"
 questEl.style.visibility = "hidden";
@@ -131,21 +133,29 @@ var clickHandler = function () {
       feedbackEl.textContent =
         "Game Over! Your Final Score is " + finalScore + "%";
       textHide.style.visibility = "hidden";
-      //save high score locally and display on screen
-      if (localStorage.getItem("High Score") < finalScore) {
-        localStorage.setItem("High Score", finalScore);
-        formInput.style.visibility = "visible";
-        //TODO: show high score instead of "loser"
-      } else {console.log("loser")}
+      formInput.style.visibility = "visible";
+      formInput.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        highScoresObj = { name: initials.value, score: finalScore };
+        var highScores = JSON.parse(
+          localStorage.getItem("high-scores") || "[]"
+        );
+        highScores.push(highScoresObj);
+        highScores.sort((a, b) => b.score - a.score);
+        localStorage.setItem("high-scores", JSON.stringify(highScores));
+
+        //TODO: show in html or window.alert; currently in console
+        highScores.forEach((e) => {
+         console.log(`${e.name} ${e.score}`);
+        });
+
+      });
     }
   }, 2000);
 };
 
-//TODO:  prompt for initials
-
-//display High Score
-//need a textContent to display it somewhere
-
+//TODO: retart quiz
 
 startEl.addEventListener("click", startQuizHandler);
 btnForEventL.forEach((button) => {
