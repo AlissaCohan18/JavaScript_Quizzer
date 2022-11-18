@@ -1,79 +1,91 @@
-//TODO: update questions AND true/false indicator for answers
 var question1 = {
-  question: `1 + 1 = ____`,
+  question: `Javascript is an ____ language`,
   answer: [
-    { text: "1", correct: false },
-    { text: "2", correct: true },
-    { text: "3", correct: false },
-    { text: "4", correct: false },
+    { text: "Object-Oriented", correct: true },
+    { text: "Object-Based", correct: false },
+    { text: "Procedural", correct: false },
+    { text: "None of the Above", correct: false },
   ],
 };
 
 var question2 = {
-  question: "3 + 4 = ____",
+  question: "Which of the following methods is used to access HTML elements using Javascript?",
   answer: [
-    { text: "5", correct: false },
-    { text: "6", correct: false },
-    { text: "7", correct: true },
-    { text: "8", correct: false },
+    { text: "getElementbyId()", correct: false },
+    { text: "getElementByClassName()", correct: false },
+    { text: "Both A and B", correct: true },
+    { text: "None of the above", correct: false },
   ],
 };
 
 var question3 = {
-  question: "9 + 3 = ____",
+  question: "Which of the following methods can be used to display data in some form using Javascript?",
   answer: [
-    { text: "9", correct: false },
-    { text: "10", correct: false },
-    { text: "11", correct: false },
-    { text: "12", correct: true },
+    { text: "document.write()", correct: false },
+    { text: "console.log()", correct: false },
+    { text: "window.alert()", correct: false },
+    { text: "All of the above", correct: true },
   ],
 };
 
 var question4 = {
-  question: "x + y = ____",
+  question: "What does the Javascript “debugger” statement do?",
   answer: [
-    { text: "a", correct: false },
-    { text: "b", correct: false },
-    { text: "c", correct: false },
-    { text: "xy", correct: true },
+    { text: "It will debug all the errors in the program at runtime", correct: false },
+    { text: "It acts as a breakpoint in a program", correct: true },
+    { text: "it will debug in the current statement if any", correct: false },
+    { text: "all of the above", correct: false },
   ],
 };
 
 var question5 = {
-  question: "a + b = ____",
+  question: "Which function is used to serialize an object into a JSON string in Javascript?",
   answer: [
-    { text: "c", correct: true },
-    { text: "d", correct: false },
-    { text: "e", correct: false },
-    { text: "f", correct: false },
+    { text: "stringify()", correct: true },
+    { text: "parse()", correct: false },
+    { text: "convert()", correct: false },
+    { text: "None of the above", correct: false },
+  ],
+};
+
+var question6 = {
+  question: "How to stop an interval timer in Javascript?",
+  answer: [
+    { text: "clearInterval", correct: true },
+    { text: "clearTimer", correct: false },
+    { text: "intervalOver", correct: false },
+    { text: "None of the above", correct: false },
   ],
 };
 
 //declare and set initial variables
-var questions = [question1, question2, question3, question4, question5];
+var questions = [question1, question2, question3, question4, question5, question6];
 var startEl = document.getElementById("start-btn");
 var questEl = document.getElementById("question-content");
 var timerEl = document.getElementById("countdown");
-var timeLeft = 15;
 var textHide = document.getElementById("hide");
 var questionEl = document.getElementById("q-here");
 var answerEl1 = document.getElementById("1");
 var answerEl2 = document.getElementById("2");
 var answerEl3 = document.getElementById("3");
 var answerEl4 = document.getElementById("4");
-var correctCount = 0;
 var feedbackEl = document.getElementById("feedback");
 var btnForEventL = document.querySelectorAll("button.btn");
 var finalScore;
 var formInput = document.getElementById("form");
+var timeLeft = 60;
+var correctCount = 0;
 var highScores = [];
-var leaderBoard;
 var highScoresObj;
+var scoreBoardEl = document.getElementById("score-board");
+var restartEl = document.getElementById("restart");
 
 //hide first q&a and timer until "start quiz"
 questEl.style.visibility = "hidden";
 textHide.style.visibility = "hidden";
 formInput.style.visibility = "hidden";
+scoreBoardEl.style.visibility = "hidden";
+restartEl.style.visibility = "hidden";
 //show q&a and start time once quiz started
 var startQuizHandler = function () {
   startEl.style.visibility = "hidden";
@@ -114,7 +126,7 @@ var clickHandler = function () {
   } else {
     finalScore = Math.round((correctCount / (questionNum + 1)) * 100);
     feedbackEl.textContent = "Incorrect. Your Score is " + finalScore + "%";
-    timeLeft = timeLeft - 5;
+    timeLeft = timeLeft - 8;
   }
   //delay prompt to next question
   setTimeout(() => {
@@ -133,6 +145,7 @@ var clickHandler = function () {
       feedbackEl.textContent =
         "Game Over! Your Final Score is " + finalScore + "%";
       textHide.style.visibility = "hidden";
+      
       formInput.style.visibility = "visible";
       formInput.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -145,19 +158,27 @@ var clickHandler = function () {
         highScores.sort((a, b) => b.score - a.score);
         localStorage.setItem("high-scores", JSON.stringify(highScores));
 
-        //TODO: show in html or window.alert; currently in console
+        //display leader board
+       
+        formInput.style.visibility = "hidden";
+        scoreBoardEl.style.visibility = "visible";
+        restartEl.style.visibility = "visible";
         highScores.forEach((e) => {
-         console.log(`${e.name} ${e.score}`);
+          var leaderBoard = document.createElement("p");
+          leaderBoard.innerText = `${e.name} - ${e.score}%`;
+          document.getElementById("scores").appendChild(leaderBoard);
         });
-
       });
     }
   }, 2000);
 };
 
-//TODO: retart quiz
+function reset() {
+  window.location.reload();
+}
 
 startEl.addEventListener("click", startQuizHandler);
 btnForEventL.forEach((button) => {
   button.addEventListener("click", clickHandler);
 });
+restartEl.addEventListener("click",reset);

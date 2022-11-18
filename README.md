@@ -1,7 +1,7 @@
-# TBD
+# JavaScript Quizzer
 
 ## Description
-
+Test your knowledge on Javascript, and get your name on the leaderboard!
 
 
 
@@ -14,3 +14,6 @@
 
 
 ## Credits
+Multiple choice question content came from: https://www.interviewbit.com/javascript-mcq/
+
+<!-- TODO:  -->
