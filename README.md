@@ -10,7 +10,7 @@ Test your knowledge on Javascript, and get your name on the leaderboard!
 
 
 ## Deployed Application Link
-https://alissacohan18.github.io/THE_JavaScript_Quizzer/
+https://alissacohan18.github.io/JavaScript_Quizzer/
 
 
 ## Credits
