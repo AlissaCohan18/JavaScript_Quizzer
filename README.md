@@ -10,10 +10,8 @@ Test your knowledge on Javascript, and get your name on the leaderboard!
 
 
 ## Deployed Application Link
-
+https://alissacohan18.github.io/THE_JavaScript_Quizzer/
 
 
 ## Credits
 Multiple choice question content came from: https://www.interviewbit.com/javascript-mcq/
-
-<!-- TODO:  -->

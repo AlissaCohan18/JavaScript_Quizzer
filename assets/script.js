@@ -1,3 +1,4 @@
+//define question objects
 var question1 = {
   question: `Javascript is an ____ language`,
   answer: [
@@ -80,7 +81,7 @@ var highScoresObj;
 var scoreBoardEl = document.getElementById("score-board");
 var restartEl = document.getElementById("restart");
 
-//hide first q&a and timer until "start quiz"
+//hide timer and first question until "start quiz"
 questEl.style.visibility = "hidden";
 textHide.style.visibility = "hidden";
 formInput.style.visibility = "hidden";
@@ -113,7 +114,7 @@ answerEl2.textContent = questions[questionNum].answer[1].text;
 answerEl3.textContent = questions[questionNum].answer[2].text;
 answerEl4.textContent = questions[questionNum].answer[3].text;
 
-//checks if right/wrong, tells user if correct, tracks # answered correctly
+//checks correctness of answer & tells user
 var clickHandler = function () {
   btnForEventL.forEach((button) => {
     button.removeEventListener("click", clickHandler);
@@ -126,11 +127,13 @@ var clickHandler = function () {
   } else {
     finalScore = Math.round((correctCount / (questionNum + 1)) * 100);
     feedbackEl.textContent = "Incorrect. Your Score is " + finalScore + "%";
+    //decrements time for wrong answers
     timeLeft = timeLeft - 8;
   }
-  //delay prompt to next question
+  //delay prior to asking next question
   setTimeout(() => {
     questionNum++;
+  //continue quiz only if both time and questions remain
     if (timeLeft > 0 && questions.length > questionNum) {
       btnForEventL.forEach((button) => {
         button.addEventListener("click", clickHandler);
@@ -145,11 +148,10 @@ var clickHandler = function () {
       feedbackEl.textContent =
         "Game Over! Your Final Score is " + finalScore + "%";
       textHide.style.visibility = "hidden";
-      
       formInput.style.visibility = "visible";
       formInput.addEventListener("submit", function (event) {
         event.preventDefault();
-
+        //add current score to what's existing in local storage, and sort by high Score
         highScoresObj = { name: initials.value, score: finalScore };
         var highScores = JSON.parse(
           localStorage.getItem("high-scores") || "[]"
@@ -157,9 +159,7 @@ var clickHandler = function () {
         highScores.push(highScoresObj);
         highScores.sort((a, b) => b.score - a.score);
         localStorage.setItem("high-scores", JSON.stringify(highScores));
-
         //display leader board
-       
         formInput.style.visibility = "hidden";
         scoreBoardEl.style.visibility = "visible";
         restartEl.style.visibility = "visible";
@@ -173,10 +173,12 @@ var clickHandler = function () {
   }, 2000);
 };
 
+//resets the page to restart the quiz
 function reset() {
   window.location.reload();
 }
 
+//Event listeners
 startEl.addEventListener("click", startQuizHandler);
 btnForEventL.forEach((button) => {
   button.addEventListener("click", clickHandler);
